@@ -1,3 +1,4 @@
+import 'package:chat/laouts/social_layout_app.dart';
 import 'package:chat/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,14 @@ class RegisterScreen extends StatelessWidget {
       create: (BuildContext context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: (context, state) {
+          if (state is CreateSuccessState) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SocialLayout(),
+              ),
+            );
+          }
           if (state is RegisterSuccessState) {
             content:
             Text("success");
@@ -206,7 +215,10 @@ class RegisterScreen extends StatelessWidget {
                         ),
                         onPressed: () {
                           RegisterCubit.get(context).userRegister(
+                            isEmailVerifaed: false,
+                            name: nameController.text,
                             email: emailController.text,
+                            phone: numberController.text,
                             password: passController.text,
                           );
                         },

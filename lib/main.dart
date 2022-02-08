@@ -1,18 +1,30 @@
+import 'package:chat/laouts/social_layout_app.dart';
 import 'package:chat/login/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chat/sharedHELper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'constant.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
-  runApp(const MyApp());
+  await Firebase.initializeApp();
+  await Shard.initial();
+  Shard.saveData(key: "sss", value: "Ahmad");
+  String ?s;
+  uId = Shard.sharedprefrences!.getString('uId');
+  print(uId);
+  Widget widget;
+  if (uId != null) {
+    widget = SocialLayout();
+  } else {
+    widget = LoginScreen();
+  }
+  runApp(MyApp(widget));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  Widget widget;
+  MyApp(this.widget);
 
   @override
   Widget build(BuildContext context) {
@@ -21,28 +33,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: MyHomePage(),
+      home: MyHomePage(this.widget),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    //await Firebase.initializeApp();
-    super.initState();
-  }
-
+class MyHomePage extends StatelessWidget {
+  Widget widget;
+  MyHomePage(this.widget);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: LoginScreen(),
+      //appBar: AppBar(),
+      body: widget,
     );
   }
 }

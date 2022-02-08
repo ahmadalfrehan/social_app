@@ -1,11 +1,14 @@
+import 'package:chat/laouts/social_layout_app.dart';
 import 'package:chat/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import '../../Home.dart';
 import '../../main.dart';
 
+import '../sharedHELper.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
@@ -20,13 +23,26 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            scaff.showSnackBar(SnackBar(
-              content: Text("success"),
-              action: SnackBarAction(
-                label: "Undo",
-                onPressed: scaff.hideCurrentSnackBar,
+            Shard.saveData(key: 'uId',value:state.uId).then((value) {
+              print('uid saved successfully');
+              print(state.uId);
+              print(Shard.getData(key: 'uId').toString());
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SocialLayout(),
+                ),
+              );
+            });
+            scaff.showSnackBar(
+              SnackBar(
+                content: Text("success"),
+                action: SnackBarAction(
+                  label: "Undo",
+                  onPressed: scaff.hideCurrentSnackBar,
+                ),
               ),
-            ));
+            );
           } else if (state is LoginErrorState) {
             scaff.showSnackBar(
               SnackBar(

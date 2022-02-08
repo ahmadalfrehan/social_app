@@ -5,15 +5,8 @@ class LoginInitialState extends LoginStates {}
 class LoginLoadingState extends LoginStates {}
 
 class LoginSuccessState extends LoginStates {
-  //final LoginModel loginModel;
-
-  //LoginSuccessState(this.loginModel);
-}
-
-class LoginSuccessStateT extends LoginStates {
-  //final TempModel tempModel;
-
-  // LoginSuccessStateT(this.tempModel);
+  final String uId;
+  LoginSuccessState(this.uId);
 }
 
 class LoginErrorState extends LoginStates {
