@@ -10,3 +10,4 @@ class SocialGetUserErrorStates extends SocialStates {
   final String error;
   SocialGetUserErrorStates(this.error);
 }
+class SocialChangeBottomNavStates extends SocialStates {}
