@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.orange,
+        bottomAppBarColor: Colors.white,
       ),
       home: MyHomePage(this.widget),
     );

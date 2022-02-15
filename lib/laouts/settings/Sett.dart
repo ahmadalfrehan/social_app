@@ -1,5 +1,6 @@
 import 'package:chat/laouts/Cubit/cubit.dart';
 import 'package:chat/laouts/Cubit/states.dart';
+import 'package:chat/laouts/EditP/EditProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,7 +11,7 @@ class SettingScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     var UserModel = SociallCubit.get(context).UU;
     return BlocProvider(
-      create: (BuildContext context) => SociallCubit(),
+      create: (BuildContext context) => SociallCubit()..getUsers(),
       child: BlocConsumer<SociallCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -79,7 +80,10 @@ class SettingScreen extends StatelessWidget {
                         Expanded(
                           child: InkWell(
                             onTap: () {
+                              //print(SociallCubit.get(context).UU!.name.toString());
+                              print(UserModel.toString());
                               print(UserModel.name);
+
                               print(UserModel.Bio);
                             },
                             child: Column(
@@ -197,7 +201,14 @@ class SettingScreen extends StatelessWidget {
                             width: 7,
                           ),
                           OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditProfile(),
+                                ),
+                              );
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -307,6 +318,7 @@ class SettingScreen extends StatelessWidget {
       ),
     );
   }
+
   Row Detalis(String s, IconData e) {
     return Row(
       children: [

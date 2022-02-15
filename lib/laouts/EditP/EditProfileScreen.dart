@@ -1,0 +1,233 @@
+import 'dart:io';
+
+import 'package:chat/laouts/Cubit/cubit.dart';
+import 'package:chat/laouts/Cubit/states.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+
+class EditProfile extends StatelessWidget {
+  const EditProfile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    var nameController = TextEditingController();
+    var phoneController = TextEditingController();
+    var bioController = TextEditingController();
+    return BlocProvider(
+      create: (BuildContext context) => SociallCubit()..getUsers(),
+      child: BlocConsumer<SociallCubit, SocialStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var UserModell = SociallCubit.get(context).UU;
+          File? image = SociallCubit.get(context).imageProfile;
+          if (UserModell != null) {
+            nameController.text = UserModell.name.toString();
+            phoneController.text = UserModell.phone.toString();
+            bioController.text = UserModell.Bio.toString();
+          }
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              actions: [
+                MaterialButton(
+                  onPressed: () {
+                    SociallCubit.get(context).UpdateUser(
+                        name: nameController.text,
+                        phone: phoneController.text,
+                        bio: bioController.text);
+                    print(SociallCubit.get(context).imageProfile);
+                  },
+                  child: const Text("save"),
+                ),
+              ],
+            ),
+            body: Container(
+              child: ListView(
+                children: [
+                  if (state is SocialUpdateUserLoadingStates)
+                    const LinearProgressIndicator(),
+                  if (state is SocialUpdateUserLoadingStates)
+                  const SizedBox(height: 4,),
+                  Stack(
+                    children: [
+                      Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: UserModell != null
+                                    ? NetworkImage(UserModell.Cover.toString())
+                                    : const NetworkImage(
+                                        'https://firebasestorage.googleapis.com/v0/b/chat-25714.appspot.com/o/users%2Fimage_picker7821665999907165931.jpg?alt=media&token=dbbcfd8e-d8b6-4e41-9258-757ff34d7794'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4),
+                                topRight: Radius.circular(4),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              SociallCubit.get(context)
+                                  .getImageCover(ImageSource.gallery);
+                            },
+                            child: const CircleAvatar(
+                              child: Icon(Icons.camera_alt_outlined),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            top: (size.width * 0.3) - 1,
+                            left: (size.width * 0.34) - 10),
+                        child: Stack(
+                          alignment: AlignmentDirectional.bottomEnd,
+                          children: [
+                            CircleAvatar(
+                              radius: 84,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 80,
+                                backgroundImage: UserModell != null
+                                    ? NetworkImage(
+                                        UserModell.ImageProfile.toString())
+                                    : const NetworkImage(
+                                        'https://firebasestorage.googleapis.com/v0/b/chat-25714.appspot.com/o/users%2Fimage_picker7821665999907165931.jpg?alt=media&token=dbbcfd8e-d8b6-4e41-9258-757ff34d7794'),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                SociallCubit.get(context)
+                                    .getImageProfile(ImageSource.gallery);
+                              },
+                              child: const CircleAvatar(
+                                child: const Icon(Icons.camera_alt_outlined),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  if(SociallCubit.get(context).imageProfile!=null||SociallCubit.get(context).imageCover!=null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child:
+                    Row(
+                      children: [
+                      if(SociallCubit.get(context).imageProfile!=null)
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              SociallCubit.get(context).uploadCoverImage();
+                            },
+                            child: const Text('update profile'),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        if(SociallCubit.get(context).imageCover!=null)
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              SociallCubit.get(context).uploadProfileImage();
+                            },
+                            child: const Text('update cover ?'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: TextField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.teal, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.green, width: 2.0),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            prefixIcon: const Icon(
+                              Icons.search,
+                            ),
+                            labelText: "name",
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: TextField(
+                          controller: phoneController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.teal, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.green, width: 2.0),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            prefixIcon: const Icon(
+                              Icons.search,
+                            ),
+                            labelText: "phone",
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: TextField(
+                          controller: bioController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.teal, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.green, width: 2.0),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            prefixIcon: const Icon(
+                              Icons.search,
+                            ),
+                            labelText: "Bio",
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

@@ -19,7 +19,7 @@ class SocialLayout extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               elevation: 0.0,
-              //backgroundColor: Colors.white,
+              //backgroundColor: Theme.of(context).bottomAppBarColor,
               title:Text(C.titles[C.currrentIndex].toString()),
             ),
             body: C.list[C.currrentIndex],
@@ -31,24 +31,24 @@ class SocialLayout extends StatelessWidget {
               selectedItemColor: Colors.black,
               items: [
                 BottomNavigationBarItem(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.home,
                   ),
                   label: C.titles[C.currrentIndex].toString(),
                   backgroundColor: Colors.orange,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.chat),
+                  icon: const Icon(Icons.chat),
                   label: C.titles[C.currrentIndex].toString(),
                   backgroundColor: Colors.orange,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.group),
+                  icon: const Icon(Icons.group),
                   label: C.titles[C.currrentIndex].toString(),
                   backgroundColor: Colors.orange,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
+                  icon: const Icon(Icons.settings),
                   label: C.titles[C.currrentIndex].toString(),
                   backgroundColor: Colors.orange,
                 ),
