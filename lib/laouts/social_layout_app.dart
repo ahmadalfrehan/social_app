@@ -1,3 +1,4 @@
+import 'package:chat/laouts/NewPosts/NewPosts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,8 +14,12 @@ class SocialLayout extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => SociallCubit()..getUsers(),
       child: BlocConsumer<SociallCubit, SocialStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if(state is SocialNewPostStates)
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>const NewPosts()));
+        },
         builder: (context, state) {
+
           var C = SociallCubit.get(context);
           return Scaffold(
             appBar: AppBar(
@@ -40,6 +45,11 @@ class SocialLayout extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.chat),
                   label: C.titles[C.currrentIndex].toString(),
+                  backgroundColor: Colors.orange,
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.upload_rounded),
+                  label: 'Add Post',
                   backgroundColor: Colors.orange,
                 ),
                 BottomNavigationBarItem(

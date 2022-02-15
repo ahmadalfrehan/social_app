@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat/laouts/Cubit/states.dart';
+import 'package:chat/laouts/NewPosts/NewPosts.dart';
 import 'package:chat/laouts/chat/Chat.dart';
 import 'package:chat/laouts/feeds/feeds.dart';
 import 'package:chat/laouts/settings/Sett.dart';
@@ -43,20 +44,26 @@ class SociallCubit extends Cubit<SocialStates> {
   List<String> titles = [
     'Home',
     'Chat',
+    'Post',
     'Users',
     'Settings',
   ];
   List<Widget> list = [
     FeedsScreen(),
     ChatScreen(),
+    NewPosts(),
     UsersScreen(),
     SettingScreen(),
   ];
 
   void ChangeBottomNav(int index) {
+    if(index==2){
+    emit(SocialNewPostStates());
+    }
+    else{
     currrentIndex = index;
     emit(SocialChangeBottomNavStates());
-  }
+  }}
 
   var imageProfile;
   final Picker = ImagePicker();

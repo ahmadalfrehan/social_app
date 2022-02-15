@@ -28,8 +28,8 @@ class SettingScreen extends StatelessWidget {
                           image: NetworkImage(UserModel!.Cover.toString()),
                           fit: BoxFit.cover,
                         ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(4),
+                        borderRadius: const BorderRadius.only(
+                          topLeft:  Radius.circular(4),
                           topRight: Radius.circular(4),
                         ),
                       ),
@@ -59,7 +59,7 @@ class SettingScreen extends StatelessWidget {
                       children: [
                         Text(
                           UserModel.name.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -69,7 +69,7 @@ class SettingScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     Text(
                       UserModel.Bio.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.normal,
                       ),
@@ -205,7 +205,7 @@ class SettingScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => EditProfile(),
+                                  builder: (context) => const EditProfile(),
                                 ),
                               );
                             },
