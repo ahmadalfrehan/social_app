@@ -30,6 +30,7 @@ class EditProfile extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               elevation: 0,
+              backgroundColor: Theme.of(context).bottomAppBarColor,
               actions: [
                 MaterialButton(
                   onPressed: () {
@@ -49,7 +50,9 @@ class EditProfile extends StatelessWidget {
                   if (state is SocialUpdateUserLoadingStates)
                     const LinearProgressIndicator(),
                   if (state is SocialUpdateUserLoadingStates)
-                  const SizedBox(height: 4,),
+                    const SizedBox(
+                      height: 4,
+                    ),
                   Stack(
                     children: [
                       Stack(
@@ -108,7 +111,7 @@ class EditProfile extends StatelessWidget {
                                     .getImageProfile(ImageSource.gallery);
                               },
                               child: const CircleAvatar(
-                                child: const Icon(Icons.camera_alt_outlined),
+                                child: Icon(Icons.camera_alt_outlined),
                               ),
                             ),
                           ],
@@ -116,36 +119,52 @@ class EditProfile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if(SociallCubit.get(context).imageProfile!=null||SociallCubit.get(context).imageCover!=null)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:
-                    Row(
-                      children: [
-                      if(SociallCubit.get(context).imageProfile!=null)
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              SociallCubit.get(context).uploadCoverImage();
-                            },
-                            child: const Text('update profile'),
+                  if (SociallCubit.get(context).imageProfile != null ||
+                      SociallCubit.get(context).imageCover != null)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          if (SociallCubit.get(context).imageProfile != null)
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      SociallCubit.get(context)
+                                          .uploadProfileImage();
+                                    },
+                                    child: const Text('update profile'),
+                                  ),
+                                  if (state
+                                      is SocialUploadImageProfileLoadingStates)
+                                    LinearProgressIndicator(),
+                                ],
+                              ),
+                            ),
+                          const SizedBox(
+                            width: 5,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        if(SociallCubit.get(context).imageCover!=null)
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              SociallCubit.get(context).uploadProfileImage();
-                            },
-                            child: const Text('update cover ?'),
-                          ),
-                        ),
-                      ],
+                          if (SociallCubit.get(context).imageCover != null)
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      SociallCubit.get(context)
+                                          .uploadCoverImage();
+                                    },
+                                    child: const Text('update cover ?'),
+                                  ),
+                                  if (state
+                                      is SocialUploadImageCoverLoadingStates)
+                                    LinearProgressIndicator(),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
                   Column(
                     children: [
                       Padding(

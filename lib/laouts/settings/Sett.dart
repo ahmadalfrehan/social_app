@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -16,223 +17,241 @@ class SettingScreen extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           return Container(
-            child: ListView(
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(UserModel!.Cover.toString()),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          topLeft:  Radius.circular(4),
-                          topRight: Radius.circular(4),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: (size.width * 0.3) - 1,
-                          left: (size.width * 0.34) - 10),
-                      child: CircleAvatar(
-                        radius: 84,
-                        backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 80,
-                          backgroundImage: NetworkImage(
-                            UserModel.ImageProfile.toString(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          UserModel.name.toString(),
-                          style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      UserModel.Bio.toString(),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              //print(SociallCubit.get(context).UU!.name.toString());
-                              print(UserModel.toString());
-                              print(UserModel.name);
-
-                              print(UserModel.Bio);
-                            },
-                            child: Column(
-                              children: const [
-                                Text(
-                                  "100",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "posts",
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {},
-                            child: Column(
-                              children: const [
-                                Text(
-                                  "100",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "Photos",
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {},
-                            child: Column(
-                              children: const [
-                                Text(
-                                  "100 K",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "Followers",
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {},
-                            child: Column(
-                              children: const [
-                                Text(
-                                  "60",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "Following",
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.5),
-                      child: Row(
+            child: state is SocialGetUserLoadingStates
+                ? LinearProgressIndicator()
+                : ListView(
+                    children: [
+                      Stack(
                         children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () {},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.person_add,
-                                    size: 25,
-                                    color: Colors.blue,
-                                  ),
-                                  Text(
-                                    " Add Friend",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                          Container(
+                            width: double.infinity,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                    NetworkImage(UserModel!.Cover.toString()),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4),
+                                topRight: Radius.circular(4),
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 7,
-                          ),
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const EditProfile(),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: (size.width * 0.3) - 1,
+                                left: (size.width * 0.34) - 10),
+                            child: CircleAvatar(
+                              radius: 84,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 80,
+                                backgroundImage: NetworkImage(
+                                  UserModel.ImageProfile.toString(),
                                 ),
-                              );
-                            },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                UserModel.name.toString(),
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            UserModel.Bio.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    //print(SociallCubit.get(context).UU!.name.toString());
+                                    print(UserModel.toString());
+                                    print(UserModel.name);
+
+                                    print(UserModel.Bio);
+                                  },
+                                  child: Column(
+                                    children: const [
+                                      Text(
+                                        "100",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "posts",
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Column(
+                                    children: const [
+                                      Text(
+                                        "100",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Photos",
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Column(
+                                    children: const [
+                                      Text(
+                                        "100 K",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Followers",
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Column(
+                                    children: const [
+                                      Text(
+                                        "60",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Following",
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.5),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Tab(
-                                  height: 25,
-                                  iconMargin: const EdgeInsets.symmetric(
-                                      horizontal: 15),
-                                  icon: Container(
-                                    child: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                Expanded(
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      SociallCubit.get(context).getPosts();
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          Icons.person_add,
+                                          size: 25,
+                                          color: Colors.blue,
+                                        ),
+                                        Text(
+                                          " Add Friend",
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
+                                ),
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                                OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const EditProfile(),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Tab(
+                                        height: 25,
+                                        iconMargin: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        icon: Container(
+                                          child: const Icon(
+                                            Icons.edit,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            width: 5,
-                          ),
                         ],
-                      ),
-                    ),
-                    Container(
+                      )
+                    ],
+                  ),
+          );
+        },
+      ),
+    );
+  }
+
+/*Container(
                         child: Column(
                       children: [
                         const Divider(
@@ -308,17 +327,7 @@ class SettingScreen extends StatelessWidget {
                           thickness: 12,
                         ),
                       ],
-                    ))
-                  ],
-                )
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
+                    ))*/
   Row Detalis(String s, IconData e) {
     return Row(
       children: [

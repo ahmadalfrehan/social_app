@@ -1,5 +1,7 @@
 import 'package:chat/laouts/Cubit/cubit.dart';
 import 'package:chat/laouts/Cubit/states.dart';
+import 'package:chat/modulo/PostModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,23 +11,38 @@ class FeedsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => SociallCubit()..getUsers(),
+      create: (BuildContext context) => SociallCubit()
+        ..getLikes()
+        ..getUsers()
+        ..getPosts(),
       child: BlocConsumer<SociallCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {
           var UserModell = SociallCubit.get(context).UU;
+          var indexISL = SociallCubit.get(context).isLiked.length;
           return SingleChildScrollView(
             child: Column(
               children: [
+                if (state is SocialGetPostsLoadingStates)
+                  const LinearProgressIndicator(),
+                if (SociallCubit.get(context).PP.isEmpty &&
+                    state is! SocialGetPostsLoadingStates)
+                  const Center(
+                    child: Text('No Posts Yet'),
+                  ),
                 ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => Post(UserModell),
+                  itemBuilder: (context, index) => Post(
+                      SociallCubit.get(context).PP[index],
+                      context,
+                      index,
+                      indexISL),
                   separatorBuilder: (context, index) => const SizedBox(
                     height: 8,
                   ),
-                  itemCount: 5,
-                )
+                  itemCount: SociallCubit.get(context).PP.length,
+                ),
               ],
             ),
           );
@@ -34,7 +51,8 @@ class FeedsScreen extends StatelessWidget {
     );
   }
 
-  Widget Post(var UserModell) {
+  Widget Post(PostModel P, context, index, indexISL) {
+    Size S = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 1, 10, 0),
       child: Card(
@@ -51,45 +69,55 @@ class FeedsScreen extends StatelessWidget {
                   width: 8,
                 ),
                 CircleAvatar(
-                  backgroundImage: UserModell != null
-                      ? NetworkImage(UserModell.ImageProfile.toString())
-                      : const NetworkImage(
-                          'https://firebasestorage.googleapis.com/v0/b/chat-25714.appspot.com/o/users%2Fimage_picker7821665999907165931.jpg?alt=media&token=dbbcfd8e-d8b6-4e41-9258-757ff34d7794'),
+                  backgroundImage: NetworkImage(
+                      SociallCubit.get(context).UU!.ImageProfile.toString()),
                 ),
                 const SizedBox(
                   width: 8,
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'أحمد الفريحان',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      P.name.toString(),
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      P.dateTime.toString(),
+                      style: const TextStyle(
+                        fontSize: 10,
                       ),
-                      Text(
-                        '10 November',
-                        style: TextStyle(
-                          fontSize: 10,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const Text(
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-              //    textDirection: TextDirection.ltr,
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                P.text.toString(),
+              ),
             ),
-            Container(
-              padding: EdgeInsets.zero,
-              child: UserModell != null
-                  ? Image.network(UserModell.ImageProfile.toString())
-                  : Image.network(
-                      'https://firebasestorage.googleapis.com/v0/b/chat-25714.appspot.com/o/users%2Fimage_picker7821665999907165931.jpg?alt=media&token=dbbcfd8e-d8b6-4e41-9258-757ff34d7794'),
-            ),
+            P.PostImage != ""
+                ? Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(P.PostImage.toString()),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(4),
+                          topRight: Radius.circular(4),
+                        ),
+                      ),
+                    ),
+                  )
+                : const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -97,22 +125,30 @@ class FeedsScreen extends StatelessWidget {
                   child: MaterialButton(
                     onPressed: () {},
                     child: Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.favorite,
                           color: Colors.red,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
-                        Text('555'),
+                        Text(
+                          SociallCubit.get(context).LikeLength.isNotEmpty
+                              ? SociallCubit.get(context)
+                                  .LikeLength[index]
+                                  .toString()
+                              : '0',
+                        ),
                       ],
                     ),
                   ),
                 ),
                 Expanded(
                   child: MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      SociallCubit.get(context).getLikes();
+                    },
                     child: Row(
                       children: const [
                         Icon(
@@ -131,24 +167,20 @@ class FeedsScreen extends StatelessWidget {
             ),
             const Divider(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
                   child: Row(
-                    children: const [
-                      SizedBox(
+                    children: [
+                      const SizedBox(
                         width: 8,
                       ),
                       CircleAvatar(
-                        radius: 10,
-                        backgroundImage: NetworkImage(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3mGL7MA05qMPhCSSbB7C2bfI6I6Hyzuv_mZkh6lxhJ54qfhBAA-y7tBIlVq7nldYRlas&usqp=CAU',
-                        ),
-                      ),
-                      SizedBox(
+                          radius: 10,
+                          backgroundImage: NetworkImage(P.Image.toString())),
+                      const SizedBox(
                         width: 5,
                       ),
-                      Expanded(
+                      const Expanded(
                         child: Text(
                           'Write your comment..',
                           style: TextStyle(overflow: TextOverflow.ellipsis),
@@ -158,55 +190,38 @@ class FeedsScreen extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: MaterialButton(
-                          onPressed: () {},
-                          child: Expanded(
-                            child: Row(
-                              children: const [
-                                Icon(
+                  child: MaterialButton(
+                    onPressed: () {
+                      //SociallCubit.get(context).getLikes();
+                      print(SociallCubit.get(context).isLiked[index]);
+                      SociallCubit.get(context)
+                          .LikePost(SociallCubit.get(context).Likes[index]);
+                    },
+                    child: Row(
+                      children: [
+                        if (indexISL != 0)
+                          SociallCubit.get(context).isLiked[indexISL]
+                              ? const Icon(
                                   Icons.favorite,
                                   color: Colors.red,
+                                )
+                              : const Icon(
+                                  Icons.favorite_border,
+                                  color: Colors.red,
                                 ),
-                                SizedBox(
-                                  width: 1,
-                                ),
-                                Expanded(
-                                    child: Text(
-                                  'Love',
-                                  style: TextStyle(fontSize: 13),
-                                )),
-                              ],
+                        SizedBox(
+                          width: S.width * 0.01,
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'Love',
+                            style: TextStyle(
+                              fontSize: 13,
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: MaterialButton(
-                          onPressed: () {},
-                          child: Expanded(
-                            child: Row(
-                              children: const [
-                                Icon(
-                                  Icons.ios_share,
-                                  color: Colors.green,
-                                ),
-                                SizedBox(
-                                  width: 1,
-                                ),
-                                Expanded(
-                                    child: Text(
-                                  'share',
-                                  style: TextStyle(fontSize: 13),
-                                )),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:chat/laouts/NewPosts/NewPosts.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,34 +16,45 @@ class SocialLayout extends StatelessWidget {
       create: (BuildContext context) => SociallCubit()..getUsers(),
       child: BlocConsumer<SociallCubit, SocialStates>(
         listener: (context, state) {
-          if(state is SocialNewPostStates)
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const NewPosts()));
+          if (state is SocialNewPostStates)
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const NewPosts()));
         },
         builder: (context, state) {
-
           var C = SociallCubit.get(context);
           return Scaffold(
             appBar: AppBar(
               elevation: 0.0,
-              //backgroundColor: Theme.of(context).bottomAppBarColor,
-              title:Text(C.titles[C.currrentIndex].toString()),
+              backgroundColor: Theme.of(context).bottomAppBarColor,
+              title: Text(C.titles[C.currrentIndex].toString()),
             ),
             body: C.list[C.currrentIndex],
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: C.currrentIndex,
+            bottomNavigationBar: CurvedNavigationBar(
+              index: C.currrentIndex,
               onTap: (index) {
                 SociallCubit.get(context).ChangeBottomNav(index);
               },
-              selectedItemColor: Colors.black,
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.home,
-                  ),
-                  label: C.titles[C.currrentIndex].toString(),
-                  backgroundColor: Colors.orange,
-                ),
-                BottomNavigationBarItem(
+              color: Colors.white,
+              buttonBackgroundColor: Colors.white,
+              backgroundColor: Colors.blueAccent,
+              animationCurve: Curves.easeInOut,
+              animationDuration: Duration(milliseconds: 600),
+              items: const [
+                Icon(Icons.home),
+                Icon(Icons.chat),
+                Icon(Icons.upload_rounded),
+                Icon(Icons.group),
+                Icon(Icons.settings),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+/*
+/*BottomNavigationBarItem(
                   icon: const Icon(Icons.chat),
                   label: C.titles[C.currrentIndex].toString(),
                   backgroundColor: Colors.orange,
@@ -61,16 +73,8 @@ class SocialLayout extends StatelessWidget {
                   icon: const Icon(Icons.settings),
                   label: C.titles[C.currrentIndex].toString(),
                   backgroundColor: Colors.orange,
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-/*
+                ),*/
+
 *  Column(
               children: [
                 SociallCubit.get(context).UU == null
