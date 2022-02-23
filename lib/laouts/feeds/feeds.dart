@@ -12,12 +12,14 @@ class FeedsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => SociallCubit()
-        ..getLikes()
         ..getUsers()
         ..getPosts(),
       child: BlocConsumer<SociallCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {
+          if (SociallCubit.get(context).UU == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
           var UserModell = SociallCubit.get(context).UU;
           var indexISL = SociallCubit.get(context).isLiked.length;
           return SingleChildScrollView(
@@ -133,13 +135,13 @@ class FeedsScreen extends StatelessWidget {
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          SociallCubit.get(context).LikeLength.isNotEmpty
-                              ? SociallCubit.get(context)
-                                  .LikeLength[index]
-                                  .toString()
-                              : '0',
-                        ),
+                        SociallCubit.get(context).LikeLength.isNotEmpty
+                            ? Text(
+                                SociallCubit.get(context)
+                                    .LikeLength[index]
+                                    .toString(),
+                              )
+                            : const Text('0'),
                       ],
                     ),
                   ),
@@ -158,7 +160,7 @@ class FeedsScreen extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        Text('114'),
+                        Text('0'),
                       ],
                     ),
                   ),
@@ -167,6 +169,7 @@ class FeedsScreen extends StatelessWidget {
             ),
             const Divider(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
                   child: Row(
@@ -192,29 +195,48 @@ class FeedsScreen extends StatelessWidget {
                 Expanded(
                   child: MaterialButton(
                     onPressed: () {
-                      //SociallCubit.get(context).getLikes();
-                      print(SociallCubit.get(context).isLiked[index]);
                       SociallCubit.get(context)
                           .LikePost(SociallCubit.get(context).Likes[index]);
                     },
                     child: Row(
                       children: [
-                        if (indexISL != 0)
-                          SociallCubit.get(context).isLiked[indexISL]
-                              ? const Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                )
-                              : const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.red,
-                                ),
+                        const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        ),
                         SizedBox(
                           width: S.width * 0.01,
                         ),
                         const Expanded(
                           child: Text(
                             'Love',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: MaterialButton(
+                    onPressed: () {
+                      SociallCubit.get(context)
+                          .disLike(SociallCubit.get(context).Likes[index]);
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.favorite_border,
+                          color: Colors.red,
+                        ),
+                        SizedBox(
+                          width: S.width * 0.01,
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'Dislove',
                             style: TextStyle(
                               fontSize: 13,
                             ),

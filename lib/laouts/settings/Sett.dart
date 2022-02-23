@@ -1,6 +1,7 @@
 import 'package:chat/laouts/Cubit/cubit.dart';
 import 'package:chat/laouts/Cubit/states.dart';
 import 'package:chat/laouts/EditP/EditProfileScreen.dart';
+import 'package:chat/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,6 +17,10 @@ class SettingScreen extends StatelessWidget {
       child: BlocConsumer<SociallCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {
+          if (UserModel == null)
+            return Center(
+              child: Text(''),
+            );
           return Container(
             child: state is SocialGetUserLoadingStates
                 ? LinearProgressIndicator()
@@ -29,7 +34,7 @@ class SettingScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image:
-                                    NetworkImage(UserModel!.Cover.toString()),
+                                    NetworkImage(UserModel.Cover.toString()),
                                 fit: BoxFit.cover,
                               ),
                               borderRadius: const BorderRadius.only(
@@ -241,6 +246,16 @@ class SettingScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+                          MaterialButton(
+                              child: Text('logOut'),
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginScreen(),
+                                  ),
+                                );
+                              })
                         ],
                       )
                     ],

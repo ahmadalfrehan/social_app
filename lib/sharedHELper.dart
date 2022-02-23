@@ -5,7 +5,6 @@ class Shard {
   static initial() async {
     sharedprefrences  = await SharedPreferences.getInstance();
   }
-
   static saveData({required String key, required dynamic value}) async {
     if(value is String) return await sharedprefrences!.setString(key, value);
     if(value is int) return await sharedprefrences!.setInt(key, value);
