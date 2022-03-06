@@ -2,6 +2,7 @@ import 'package:chat/laouts/social_layout_app.dart';
 import 'package:chat/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 // import '../../Home.dart';
 import '../../main.dart';
 
@@ -23,20 +24,20 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            Shard.saveData(key: 'uId',value:state.uId).then((value) {
+            Shard.saveData(key: 'uId', value: state.uId).then((value) {
               print('uid saved successfully');
               print(state.uId);
               print(Shard.getData(key: 'uId').toString());
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SocialLayout(),
+                  builder: (context) => const SocialLayout(),
                 ),
               );
             });
             scaff.showSnackBar(
               SnackBar(
-                content: Text("success"),
+                content: const Text("success"),
                 action: SnackBarAction(
                   label: "Undo",
                   onPressed: scaff.hideCurrentSnackBar,
@@ -58,7 +59,7 @@ class LoginScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             body: Container(
-              constraints: BoxConstraints.expand(),
+              constraints: const BoxConstraints.expand(),
               decoration: const BoxDecoration(
                   // color: Color.fromARGB(255, 255, 255, 225),
                   ),
@@ -79,15 +80,11 @@ class LoginScreen extends StatelessWidget {
                       style: TextStyle(),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 20),
                       child: TextFormField(
                         decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.email,
-
-                              // color: Colors.teal,//hainfa
-                            ),
+                            prefixIcon: const Icon(Icons.email),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),
@@ -105,8 +102,8 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
                       child: TextFormField(
                         decoration: InputDecoration(
                             // hoverColor: Colors.green,
@@ -131,14 +128,14 @@ class LoginScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
-                      decoration: BoxDecoration(),
+                      decoration: const BoxDecoration(),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          side: BorderSide(),
+                          side: const BorderSide(),
                           elevation: 7,
                           shape: const StadiumBorder(side: BorderSide()),
                           fixedSize: const Size(300, 50),
@@ -174,7 +171,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        side: BorderSide(color: Colors.white),
+                        side: const BorderSide(color: Colors.white),
                         primary: Colors.white,
                         elevation: 7,
                         shape: const StadiumBorder(side: BorderSide()),

@@ -15,6 +15,7 @@ class RegisterScreen extends StatelessWidget {
   var passController = TextEditingController();
   var numberController = TextEditingController();
   var facebookController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var scaff = ScaffoldMessenger.of(context);
@@ -26,17 +27,20 @@ class RegisterScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SocialLayout(),
+                builder: (context) => LoginScreen(),
               ),
             );
-          }
+          } //
           if (state is RegisterSuccessState) {
-            content:
-            Text("success");
-            action:
-            SnackBarAction(
-              label: "Undo",
-              onPressed: scaff.hideCurrentSnackBar,
+            scaff.showSnackBar(
+              SnackBar(
+                content: const Text(
+                    "You did a great job..You created the account successfully now please login "),
+                action: SnackBarAction(
+                  label: "Undo",
+                  onPressed: scaff.hideCurrentSnackBar,
+                ),
+              ),
             );
           } else if (state is RegisterErrorState) {
             scaff.showSnackBar(

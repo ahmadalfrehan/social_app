@@ -40,23 +40,20 @@ class ChatScreen extends StatelessWidget {
 
   Widget INK(UsersModel users, context) => InkWell(
         onTap: () {
-
           Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>ChatDetailes(users))
-
-          );
+              MaterialPageRoute(builder: (context) => ChatDetailes(users)));
         },
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
             children: [
+
               const SizedBox(
                 width: 8,
               ),
               CircleAvatar(
                 radius: 45,
-                backgroundImage: NetworkImage(users.ImageProfile
-                    .toString()),
+                backgroundImage: NetworkImage(users.ImageProfile.toString()),
               ),
               const SizedBox(
                 width: 8,

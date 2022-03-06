@@ -7,14 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatelessWidget {
-  const EditProfile({Key? key}) : super(key: key);
+
+  var nameController = TextEditingController();
+  var phoneController = TextEditingController();
+  var bioController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    var nameController = TextEditingController();
-    var phoneController = TextEditingController();
-    var bioController = TextEditingController();
     return BlocProvider(
       create: (BuildContext context) => SociallCubit()..getUsers(),
       child: BlocConsumer<SociallCubit, SocialStates>(

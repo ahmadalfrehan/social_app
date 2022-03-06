@@ -18,12 +18,12 @@ class SettingScreen extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           if (UserModel == null)
-            return Center(
-              child: Text(''),
+            return const Center(
+              child: const Text(''),
             );
           return Container(
             child: state is SocialGetUserLoadingStates
-                ? LinearProgressIndicator()
+                ? const LinearProgressIndicator()
                 : ListView(
                     children: [
                       Stack(
@@ -219,7 +219,7 @@ class SettingScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const EditProfile(),
+                                             EditProfile(),
                                       ),
                                     );
                                   },
@@ -246,18 +246,18 @@ class SettingScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          MaterialButton(
-                              child: Text('logOut'),
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => LoginScreen(),
-                                  ),
-                                );
-                              })
                         ],
-                      )
+                      ),
+                      ElevatedButton(
+                          child: const Text('LogOut?'),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          })
                     ],
                   ),
           );
